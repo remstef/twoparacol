@@ -1,0 +1,54 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatexmk
+
+\pdfminorversion=5
+\pdfcompresslevel=9
+\pdfobjcompresslevel=3
+
+\documentclass{article}
+
+\usepackage[
+ a4paper, % 210mm x 297mm
+ ignorehead,
+ ignorefoot,
+ ignoremp,
+ lmargin=30pt,
+ rmargin=60pt,
+]{geometry}
+
+\usepackage[
+  colorright=antiquewhite,
+  leftcolrightmargin=15pt,
+  rightcolleftmargin=50pt,
+]{twoparacol}
+
+\tpset{
+%  debug, 
+%  nocolor,
+  colorleft=macchiato,
+  leftcolrightmargin=18pt,
+  rightcolleftmargin=52pt,
+}
+
+\usepackage{blindtext}% example texts 1
+\usepackage{kantlipsum}% example texts 2
+
+\setlength\parindent{0pt} % set the default indentation for paragraph beginnings
+\pagestyle{empty} % set pagestyle to empty
+
+\begin{document}
+\begin{twoparacol}
+
+\printdebuginfo
+
+\vspace{3ex}
+
+kant 1: \kant[1]
+
+\switchcolumn
+
+kant 2: \kant[2]
+
+\flushpage
+\end{twoparacol}
+\end{document}

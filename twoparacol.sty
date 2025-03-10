@@ -1,0 +1,123 @@
+% !TEX encoding = UTF-8 Unicode
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{twoparacol}[2025/03/06]
+
+% requirements
+\RequirePackage{paracol}
+\RequirePackage[dvipsnames,x11names]{xcolor}
+\RequirePackage{xkeyval}
+
+% define static variables
+% colors
+\definecolor{macchiato}{RGB}{229,224,212}
+\definecolor{antiquewhite}{rgb}{0.99, 0.98, 0.97}
+\definecolor{yellower}{RGB}{238,232,170} % for testing purposes
+\definecolor{lightblueer}{rgb}{0.8,1,1} % for testing purposes
+% lengths
+\newlength{\leftsidemargin}\setlength{\leftsidemargin}{\dimexpr\oddsidemargin+1in\relax}%
+
+% define (non-static) variables, which will be set by definekeys
+\newlength{\leftcolfullwidth}
+\newlength{\leftcolrightmargin}
+\newlength{\rightcolleftmargin}
+\newif\iftp@nocolor
+\newif\iftp@debug
+
+% set default values for variables
+\setlength\leftcolfullwidth{\dimexpr\paperwidth/3\relax}
+\setlength\leftcolrightmargin{\dimexpr\leftsidemargin/2\relax}
+\setlength\rightcolleftmargin{\dimexpr\leftsidemargin/2\relax}
+\tp@debugfalse
+\tp@nocolorfalse
+
+% define the package keys
+\define@key{twoparacol.sty}{colorleft}{\colorlet{colorleft}{#1}}
+\define@key{twoparacol.sty}{colorright}{\colorlet{colorright}{#1}}
+\define@key{twoparacol.sty}{leftcolwidth}{\setlength\leftcolfullwidth{#1}}
+\define@key{twoparacol.sty}{leftcolrightmargin}{\setlength\leftcolrightmargin{#1}}
+\define@key{twoparacol.sty}{rightcolleftmargin}{\setlength\rightcolleftmargin{#1}}
+\define@key{twoparacol.sty}{nocolor}[]{\tp@nocolortrue}
+\define@key{twoparacol.sty}{debug}[]{\tp@debugtrue}
+
+\ProcessOptionsX % \relax -- is that relax really necessary? 
+
+% change settings via \tpset{key=value,...}
+\newcommand*\tpset[1]{\setkeys{twoparacol.sty}{#1}\applysettings}
+
+% helper variables for applying the defined settings
+\newlength{\paracolsep}
+\newlength{\paracolwidth}
+
+% helper function to apply the settings
+\newcommand{\applysettings}{
+  % define helper lengths
+  \setlength{\paracolsep}{\dimexpr\leftcolrightmargin+\rightcolleftmargin\relax}%
+  \setlength{\paracolwidth}{\dimexpr\leftcolfullwidth-\leftsidemargin-\leftcolrightmargin\relax}%
+  % apply paracols \setcolumnwidth
+  \setcolumnwidth{\paracolwidth/\paracolsep}
+  % apply paracols background coloring
+  \iftp@debug % debug mode on
+    %% FOR VISUAL EXPLAINABILITY 
+    \backgroundcolor{t}[rgb]{0.7,0,0} % dark red for top margin
+    \backgroundcolor{b}[rgb]{0.8,0.6,0} % dark orange for bottom margin
+    \backgroundcolor{l}[rgb]{0,0,0.7} % dark blue for left margin
+    \backgroundcolor{r}[rgb]{0,0.7,0} % dark green for right margin
+    \backgroundcolor{c[0]}[rgb]{1,0.8,1} % pink for colunmn-0
+    \backgroundcolor{c[1]}[rgb]{1,1,0.8} % cream yellow for column-1
+    \backgroundcolor{g}[rgb]{0.8,1,1} % light blue for the gap
+    \backgroundcolor{f}[rgb]{0.8,0,1} % purple for page-wise floats
+    \backgroundcolor{n}[rgb]{0.8,0.6,1} % light purple for page-wise footnotes
+    \backgroundcolor{p}[rgb]{0.8,1,0.6} % pale green for pre/post-environment
+    \backgroundcolor{s}[rgb]{0.8,0.8,0.8} % light gray for spanning texts
+  \else % debug mode off
+    \iftp@nocolor % no color mode on
+      % \nobackgroundcolor{region}
+      \resetbackgroundcolor % default state with no coloring
+      \tp@nocolorfalse % reset to false, needed if later the process tpset with column color is called
+    \else % no color mode off
+      \@ifundefinedcolor{colorleft}{}{\backgroundcolor{C[0](10000pt,10000pt)(\leftcolrightmargin,10000pt)}{colorleft}}
+      \@ifundefinedcolor{colorright}{}{\backgroundcolor{C[1](\rightcolleftmargin,10000pt)(10000pt,10000pt)}{colorright}}    
+    \fi % end color mode condition
+  \fi % end debug mode condition
+}
+
+% 1 point (pt) is approximately 0.351459 mm .3527777778
+\newcommand{\mm}[1]{\dimexpr .3527777778#1  \relax}
+
+% helper function to print dimensions
+\newcommand{\printdebuginfo}{
+  \switchcolumn
+  \rule{\linewidth}{2pt}
+  current-col-linewidth=\the\linewidth \\
+  \switchcolumn
+  \rule{\linewidth}{2pt}
+  current-col linewidth = \the\linewidth \\
+  paperwidth = \the\paperwidth \\
+  textwidth = \the\textwidth \\
+  leftmargin = \the\leftsidemargin \\
+  leftcolfullwidth = \the\leftcolfullwidth \\
+  leftcolwidth = \the\paracolwidth \\
+  rightcolwidth = \the\dimexpr\textwidth-\paracolwidth-\paracolsep\relax \\
+  colsep = \the\paracolsep \\
+  leftcol rightmargin = \the\leftcolrightmargin \\
+  rightcol leftmargin = \the\rightcolleftmargin \\
+  rightcol righttmargin ignoremp = \the\dimexpr\paperwidth-\leftsidemargin-\textwidth\relax \\
+  rightcol righttmargin includemp = \the\dimexpr\paperwidth-\leftsidemargin-\textwidth-\marginparwidth-\marginparsep\relax \\
+  marginparwidth = \the\marginparwidth \\
+  marginparsep = \the\marginparsep \\
+  includemp = \ifGm@includemp{}Y\else{}N\fi \\
+  debug = \iftp@debug{}Y\else{}N\fi
+}
+
+% simple wrapper environment for paracol with two columns
+\newenvironment{twoparacol}{
+  \begin{paracol}{2}
+}{
+  \end{paracol}
+}
+
+% apply settings once package was loaded
+\applysettings
+
+% finalize package processing
+\endinput
