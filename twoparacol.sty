@@ -13,8 +13,8 @@
 \definecolor{antiquewhite}{rgb}{0.99, 0.98, 0.97}
 \definecolor{yellower}{RGB}{238,232,170} % for testing purposes
 \definecolor{lightblueer}{rgb}{0.8,1,1} % for testing purposes
-% lengths
-\newlength{\leftsidemargin}
+% dymnamic length functions
+\newcommand*{\leftsidemargin}{\dimexpr\oddsidemargin+1in\relax}%
 
 % define (non-static) variables, which will be set by definekeys
 \newlength{\leftcolfullwidth}
@@ -24,7 +24,6 @@
 \newif\iftp@debug
 
 % set default values for variables
-\setlength{\leftsidemargin}{\dimexpr\oddsidemargin+1in\relax}%
 \setlength\leftcolfullwidth{\dimexpr\paperwidth/3\relax}
 \setlength\leftcolrightmargin{\dimexpr\leftsidemargin/2\relax}
 \setlength\rightcolleftmargin{\dimexpr\leftsidemargin/2\relax}
@@ -52,7 +51,6 @@
 % helper function to apply the settings
 \newcommand{\applysettings}{
   % define helper lengths
-  \setlength{\leftsidemargin}{\dimexpr\oddsidemargin+1in\relax}%
   \setlength{\paracolsep}{\dimexpr\leftcolrightmargin+\rightcolleftmargin\relax}%
   \setlength{\paracolwidth}{\dimexpr\leftcolfullwidth-\leftsidemargin-\leftcolrightmargin\relax}%
   % apply paracols \setcolumnwidth

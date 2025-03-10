@@ -12,24 +12,20 @@
  ignorehead,
  ignorefoot,
  ignoremp,
- lmargin=30pt,
+ lmargin=0pt,
  rmargin=60pt,
 ]{geometry}
 
 \usepackage{twoparacol}
 
-%\tpset{
-%%  debug, 
-%%  nocolor,
-%  colorleft=macchiato,
-%  leftcolrightmargin=18pt,
-%  rightcolleftmargin=52pt,
-%}
+\geometry{
+  lmargin=30pt
+}
 
 \tpset{
-  leftcolwidth=\dimexpr.3\paperwidth\relax,
-  leftcolrightmargin=\leftsidemargin,
-  rightcolleftmargin=\leftsidemargin,
+  leftcolwidth=\dimexpr\paperwidth/3+\leftsidemargin\relax,
+  leftcolrightmargin=\dimexpr\leftsidemargin/2\relax,
+  rightcolleftmargin=\dimexpr2\leftsidemargin\relax,
   colorleft=macchiato,
   colorright=antiquewhite
 }
