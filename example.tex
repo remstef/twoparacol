@@ -16,18 +16,22 @@
  rmargin=60pt,
 ]{geometry}
 
-\usepackage[
-  colorright=antiquewhite,
-  leftcolrightmargin=15pt,
-  rightcolleftmargin=50pt,
-]{twoparacol}
+\usepackage{twoparacol}
+
+%\tpset{
+%%  debug, 
+%%  nocolor,
+%  colorleft=macchiato,
+%  leftcolrightmargin=18pt,
+%  rightcolleftmargin=52pt,
+%}
 
 \tpset{
-%  debug, 
-%  nocolor,
+  leftcolwidth=\dimexpr.3\paperwidth\relax,
+  leftcolrightmargin=\leftsidemargin,
+  rightcolleftmargin=\leftsidemargin,
   colorleft=macchiato,
-  leftcolrightmargin=18pt,
-  rightcolleftmargin=52pt,
+  colorright=antiquewhite
 }
 
 \usepackage{blindtext}% example texts 1
