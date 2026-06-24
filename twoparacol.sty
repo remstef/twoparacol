@@ -49,7 +49,7 @@
 \newlength{\paracolwidth}
 
 % helper function to apply the settings
-\newcommand{\applysettings}{
+\newcommand*{\applysettings}{
   % define helper lengths
   \setlength{\paracolsep}{\dimexpr\leftcolrightmargin+\rightcolleftmargin\relax}%
   \setlength{\paracolwidth}{\dimexpr\leftcolfullwidth-\leftsidemargin-\leftcolrightmargin\relax}%
@@ -85,13 +85,26 @@
 \newcommand{\mm}[1]{\dimexpr .3527777778#1  \relax}
 
 % helper function to print dimensions
-\newcommand{\printdebuginfo}{
-  \switchcolumn
-  \rule{\linewidth}{2pt}
-  current-col-linewidth=\the\linewidth \\
-  \switchcolumn
-  \rule{\linewidth}{2pt}
-  current-col linewidth = \the\linewidth \\
+\newcommand{\printtpdebuginfo}{%
+  \switchcolumn%
+  \noindent%
+  \rule{\linewidth}{2pt}\\%
+  current-col-linewidth=\the\linewidth \\[3\baselineskip]
+  %
+  \noindent\parbox{\dimexpr\the\linewidth\relax}{%
+    \rule{\dimexpr\linewidth+\rightmargin\relax}{2pt}\\%
+    \hspace*{-\rightcolleftmargin}\rule{\dimexpr\linewidth+\rightcolleftmargin\relax}{2pt}\\%
+    \hspace*{-\rightcolleftmargin}\rule{\dimexpr\linewidth+\rightcolleftmargin+\rightmargin\relax}{2pt}\\%
+	\rule{\linewidth}{2pt}\\%
+    Some parbox content line1\\%
+    Some parbox content line2\\%
+    Some parbox content line3\\%
+    \hspace*{-\rightcolleftmargin}\rule{\dimexpr\linewidth+\rightcolleftmargin+\rightmargin\relax}{2pt}\\%
+  }%
+  \switchcolumn%
+  \noindent
+  \rule{\linewidth}{2pt}\\%
+  current-col-linewidth = \the\linewidth \\
   paperwidth = \the\paperwidth \\
   textwidth = \the\textwidth \\
   leftmargin = \the\leftsidemargin \\
@@ -106,7 +119,19 @@
   marginparwidth = \the\marginparwidth \\
   marginparsep = \the\marginparsep \\
   includemp = \ifGm@includemp{}Y\else{}N\fi \\
-  debug = \iftp@debug{}Y\else{}N\fi
+  debug = \iftp@debug{}Y\else{}N\fi\\[3\baselineskip]
+  %
+  \noindent\parbox{\dimexpr\the\paracolwidth\relax}{%
+    \rule{\dimexpr\linewidth+\leftcolrightmargin\relax}{2pt}\\%
+    \hspace*{-\leftsidemargin}\rule{\dimexpr\linewidth+\leftsidemargin\relax}{2pt}\\%
+    \hspace*{-\leftsidemargin}\rule{\dimexpr\linewidth+\leftsidemargin+\leftcolrightmargin\relax}{2pt}\\%
+	\rule{\linewidth}{2pt}\\%
+    Some parbox content line1\\%
+    Some parbox content line2\\%
+    Some parbox content line3\\%
+    \hspace*{-\leftsidemargin}\rule{\dimexpr\linewidth+\leftsidemargin+\leftcolrightmargin\relax}{2pt}\\%
+  }%
+
 }
 
 % simple wrapper environment for paracol with two columns
